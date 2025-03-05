@@ -1,0 +1,2 @@
+# CryptoExchange.Net.Analyzers
+ 

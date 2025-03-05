@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+	  <IncludeBuildOutput>false</IncludeBuildOutput>
+	  <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	  <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+  </PropertyGroup>
+
+	<PropertyGroup>
+		<PackageId>CryptoExchange.Net.Analyzers</PackageId>
+		<PackageVersion>0.0.1</PackageVersion>
+		<AssemblyVersion>0.0.1</AssemblyVersion>
+		<FileVersion>0.0.1</FileVersion>
+		<Authors>JKorf</Authors>
+		<Description>Analyzers for CryptoExchange.Net implementations</Description>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/JKorf/CryptoExchange.Net.Analyzers.git</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/JKorf/CryptoExchange.Net.Analyzers</PackageProjectUrl>
+		<NeutralLanguage>en</NeutralLanguage>
+		<PackageReleaseNotes></PackageReleaseNotes>
+		<Nullable>enable</Nullable>
+		<LangVersion>12.0</LangVersion>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<NoPackageAnalysis>true</NoPackageAnalysis>
+		<DevelopmentDependency>true</DevelopmentDependency>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<None Update="tools\*.ps1" CopyToOutputDirectory="Always" Pack="true" PackagePath="" />
+		<None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+	</ItemGroup>
+	
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.13.0" />
+  </ItemGroup>
+
+</Project>
