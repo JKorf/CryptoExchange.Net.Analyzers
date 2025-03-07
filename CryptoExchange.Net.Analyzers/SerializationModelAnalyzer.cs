@@ -29,10 +29,26 @@ namespace TestAnalyzer
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
 
-            context.RegisterSyntaxNodeAction(AnalyzeSyntax, SyntaxKind.RecordDeclaration);
+            context.RegisterCompilationStartAction(context =>
+            {
+                var jsonSerializableContextClass = FindJsonSerializerContextSubclassWithJsonSerializable(context.Compilation);
+                if (jsonSerializableContextClass == null)
+                    return;
+                // Get all the JsonSerializable attribute notations on context class
+                var jsonSerializableAttributes = jsonSerializableContextClass
+                    .GetAttributes()
+                    .Where(attr => attr.AttributeClass?.ToString() == "System.Text.Json.Serialization.JsonSerializableAttribute");
+                if (jsonSerializableAttributes == null)
+                    return;
+
+
+                context.RegisterSyntaxNodeAction(c => AnalyzeSyntax(c, jsonSerializableAttributes), SyntaxKind.RecordDeclaration);
+
+            });
+
         }
 
-        private void AnalyzeSyntax(SyntaxNodeAnalysisContext context)
+        private void AnalyzeSyntax(SyntaxNodeAnalysisContext context, System.Collections.Generic.IEnumerable<AttributeData> jsonSerializableAttributes)
         {
             var classDeclaration = (RecordDeclarationSyntax)context.Node;
 
@@ -48,14 +64,6 @@ namespace TestAnalyzer
             if (context.SemanticModel.GetDeclaredSymbol(classDeclaration) is not INamedTypeSymbol classSymbol)
                 return;
 
-            var jsonSerializableContextClass = FindJsonSerializerContextSubclassWithJsonSerializable(context.SemanticModel.Compilation);
-            if (jsonSerializableContextClass == null)
-                return;
-
-            // Get all the JsonSerializable attribute notations on context class
-            var jsonSerializableAttributes = jsonSerializableContextClass
-                .GetAttributes()
-                .Where(attr => attr.AttributeClass?.ToString() == "System.Text.Json.Serialization.JsonSerializableAttribute");
 
             var attributeFound = false;
             foreach (var jsonSerializableAttribute in jsonSerializableAttributes)
