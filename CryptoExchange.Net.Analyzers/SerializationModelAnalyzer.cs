@@ -64,7 +64,6 @@ namespace TestAnalyzer
             if (context.SemanticModel.GetDeclaredSymbol(classDeclaration) is not INamedTypeSymbol classSymbol)
                 return;
 
-
             var attributeFound = false;
             foreach (var jsonSerializableAttribute in jsonSerializableAttributes)
             {
@@ -73,7 +72,7 @@ namespace TestAnalyzer
                 {
                     // The first constructor argument of the [JsonSerializable] attribute should match the type of the class with [SerializationModel]
 #pragma warning disable RS1024 // Symbols should be compared for equality
-                    if (constructorArguments[0].Value == classSymbol)
+                    if (constructorArguments[0].Value == classSymbol || (constructorArguments[0].Value as IArrayTypeSymbol)?.ElementType.Name == classSymbol.Name)
                         attributeFound = true;
 #pragma warning restore RS1024 // Symbols should be compared for equality
                 }
@@ -81,7 +80,7 @@ namespace TestAnalyzer
 
             if (!attributeFound)
             {
-                var diagnostic = Diagnostic.Create(_rule, classDeclaration.GetLocation(), "TRUE");
+                var diagnostic = Diagnostic.Create(_rule, classDeclaration.GetLocation());
                 context.ReportDiagnostic(diagnostic);
             }
         }
