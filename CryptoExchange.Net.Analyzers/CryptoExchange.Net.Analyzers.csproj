@@ -9,9 +9,9 @@
 
 	<PropertyGroup>
 		<PackageId>CryptoExchange.Net.Analyzers</PackageId>
-		<PackageVersion>0.0.1</PackageVersion>
-		<AssemblyVersion>0.0.1</AssemblyVersion>
-		<FileVersion>0.0.1</FileVersion>
+		<PackageVersion>0.0.2</PackageVersion>
+		<AssemblyVersion>0.0.2</AssemblyVersion>
+		<FileVersion>0.0.2</FileVersion>
 		<Authors>JKorf</Authors>
 		<Description>Analyzers for CryptoExchange.Net implementations</Description>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
